@@ -4,8 +4,9 @@ from tkinter import ttk
 import pandas as pd
 import csv
 import math  
-
-userList = pd.read_csv('candidates.csv', usecols=['user_id', 'taste_group'])
+from tkinter import StringVar, IntVar
+init = 0
+userList = pd.read_csv('candidates.csv', usecols=['user_id', 'taste_group','user_name'])
 print(userList)
 tasteGroup = []
 with open('taste_grp.csv', 'r') as f:
@@ -44,7 +45,7 @@ def clickPredictSubmit():
         local_sum_square =0
         for idx, val in enumerate(grp):
             if(idx in selectList):
-                print(idx)
+                #print(idx)
                 local_sum_square = local_sum_square +((float(val)-1)*(float(val)-1))
             else:
                 local_sum_square = local_sum_square +(float(val))*(float(val))
@@ -53,12 +54,20 @@ def clickPredictSubmit():
     #print('finalScore',min(finalScore))
     #print('finalScore',finalScore.index(min(finalScore)))
     showTargetUser(finalScore.index(min(finalScore)))   
+text = StringVar()
+text.set('')
+tk.Label(tab1, text="User you should find:").grid(row=2)
+tk.Label(tab1, textvariable=text).grid(row=2,column=1)
 
 def showTargetUser(group):
-    user =userList[userList['taste_group'] == group]['user_id'].item()
-    tk.Label(tab1, text="User you should find:").grid(row=2)
+    user =userList[userList['taste_group'] == group]['user_name'].sample().item()
+    print(user)
+    text.set(user)
    
-    tk.Label(tab1, text=user).grid(row=2,column=1)
+  
+        
+   
+
 
                 
 
